@@ -23,7 +23,8 @@
       data() {
          return {
             layoutMode: "view",
-            grids: null
+            grids: null,
+            serializedGrids: {}
          }
       },
       mounted() {
@@ -49,6 +50,19 @@
          saveLayout() {
             this.layoutMode = 'view';
             this.toggleLayout('view')
+            this.serializedGrids = {};
+            this.grids.forEach((grid) => {
+               this.serializedGrids[grid.el.classList[0]] = [];
+               grid.engine.nodes.forEach((node) => {
+                  this.serializedGrids[grid.el.classList[0]].push({
+                     x: node.x,
+                     y: node.y,
+                     width: node.width,
+                     height: node.height
+                  });
+               });
+               localStorage.setItem("grids", JSON.stringify(this.serializedGrids));
+            })
          }
       }
    }

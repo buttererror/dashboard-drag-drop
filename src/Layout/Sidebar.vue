@@ -1,9 +1,9 @@
 <template>
      <aside class="l-sidebar grid-stack">
-          <div class="grid-stack-item" data-gs-x="0" data-gs-y="1" data-gs-width="12" data-gs-height="3">
-               <div class="grid-stack-item-content chart" ref="chartdiv">
-               </div>
-          </div>
+<!--                    <div class="grid-stack-item" data-gs-x="0" data-gs-y="1" data-gs-width="12" data-gs-height="3">-->
+<!--                         <div class="grid-stack-item-content chart" ref="chartdiv">-->
+<!--                         </div>-->
+<!--                    </div>-->
 
      </aside>
 </template>
@@ -17,31 +17,29 @@
    export default {
       name: "Sidebar",
       mounted() {
+         let grids = this.initGrids();
 
-         let grids = window.GridStack.initAll({
-            resizable: {
-               handles: 'e, se, s, sw, w'
-            },
-            acceptWidgets: true
-         });
+         // send grids to be usable in other components
          window.bus.$emit("send-grids", grids);
-         grids[1].enableResize(false);
+
+         // disable resize in sidebar by default
          grids.forEach((grid) => {
-            grid.disable()
-            grid.on('dropped', () => {
-               if (grid.el.classList[0] === "l-sidebar") {
-                  grid.enableResize(false);
-                  grid.minHeight(window.$('.grid-stack-item'), 2);
-                  window.$('.grid-stack-item').css({left: '0', width: '100%', height: '220px'});
-               } else {
-                  grid.enableResize(true);
-                  grid.resize(window.$('.grid-stack-item'), 3, 3);
-               }
-               this.createChart();
-            })
+            // listen on drop event
+            this.resizeAndCreateChartAfterDrop(grid);
+
+            if (localStorage.getItem("grids")) {
+               this.loadGridsItemsFromLocalStorageAndCreateWidget(grid);
+            } else if (!localStorage.getItem("grids")) {
+               this.createGridItemInSidebar(grid);
+            }
+            // disable grids by default
+            grid.disable();
+            if (grid.el.classList[0] === 'l-sidebar') {
+               grid.enableResize(false, true);
+               window.$('.l-sidebar .grid-stack-item').css({left: '0', width: '100%', height: '220px'});
+            }
          })
          this.createChart();
-
       },
       beforeDestroy() {
          if (this.chart) {
@@ -49,6 +47,51 @@
          }
       },
       methods: {
+         initGrids() {
+            return window.GridStack.initAll({
+               resizable: {
+                  handles: 'e, se, s, sw, w'
+               },
+               acceptWidgets: true
+            });
+         },
+         createGridItemInSidebar(grid) {
+            if(grid.el.classList[0] === "l-sidebar") {
+               let sidebarOptions = [{"x":0,"y":0,"width":12,"height":3}];
+               grid.addWidget('<div><div class="grid-stack-item-content chart" ref="chartdiv"></div></div>', sidebarOptions);
+            }
+         },
+         loadGridItems(grid) {
+            let serializedGrids = JSON.parse(localStorage.getItem("grids"))
+            let gridsItems = {};
+            for (let prop in serializedGrids) {
+               gridsItems[prop] = window.GridStack.Utils.sort(serializedGrids[prop])
+            }
+            return gridsItems[grid.el.classList[0]]
+         },
+         loadGridsItemsFromLocalStorageAndCreateWidget(grid) {
+            let items = this.loadGridItems(grid)
+            grid.batchUpdate();
+            items.forEach(function (node) {
+               grid.addWidget('<div><div class="grid-stack-item-content chart" ref="chartdiv"></div></div>', node);
+            });
+            grid.commit();
+         },
+         resizeAndCreateChartAfterDrop(grid) {
+            grid.on('dropped', () => {
+               if (grid.el.classList[0] === "l-sidebar") {
+                  // when dropping into sidebar. resize and don't make it resizable
+                  grid.enableResize(false);
+                  grid.minHeight(window.$('.grid-stack-item'), 2);
+                  window.$('.grid-stack-item').css({left: '0', width: '100%', height: '220px'});
+               } else {
+                  // when dropping into main content. resize and make it resizable
+                  grid.enableResize(true);
+                  grid.resize(window.$('.grid-stack-item'), 3, 3);
+               }
+               this.createChart();
+            })
+         },
          createChart() {
             if (this.chart) {
                this.chart.dispose();
