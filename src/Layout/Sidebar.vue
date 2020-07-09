@@ -1,6 +1,6 @@
 <template>
      <aside class="l-sidebar grid-stack">
-          <div class="grid-stack-item" data-gs-x="0" data-gs-y="1" data-gs-width="3" data-gs-height="3">
+          <div class="grid-stack-item" data-gs-x="0" data-gs-y="1" data-gs-width="12" data-gs-height="3">
                <div class="grid-stack-item-content chart" ref="chartdiv">
                </div>
           </div>
@@ -27,12 +27,14 @@
          grids[1].enableResize(false);
          grids.forEach((grid) => {
             grid.on('dropped', () => {
-               // if(grid.el.classList[0] === "l-sidebar") {
-               //    console.log("sidebar")
-               //    grid.column(12);
-               // }else {
-               //    grid.column(2);
-               // }
+               if(grid.el.classList[0] === "l-sidebar") {
+                  grid.enableResize(false);
+                  grid.minHeight(window.$('.grid-stack-item'), 2);
+                  window.$('.grid-stack-item').css({left: '5px', width: '286px', height: '220px'});
+               }else {
+                  grid.enableResize(true);
+                  grid.resize(window.$('.grid-stack-item'),3, 3);
+               }
                this.createChart();
             })
          })
