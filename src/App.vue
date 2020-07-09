@@ -8,6 +8,8 @@ import DashboardLayout from "./Layout/DashboardLayout";
 export default {
   name: 'App',
    components: {DashboardLayout},
+   mounted() {
+   }
 }
 </script>
 
