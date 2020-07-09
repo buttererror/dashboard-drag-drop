@@ -2,3 +2,17 @@
 @import "layout";
 @import "module";
 @import "base";
+
+.l-sidebar {
+  .grid-stack-item {
+    width: 271px!important;
+    margin-top: 50px;
+  }
+}
+//.grid-stack-item {
+//  left: 7px;
+//  .grid-stack-item-content {
+//    left: 0!important;
+//    width: 100% !important;
+//  }
+//}

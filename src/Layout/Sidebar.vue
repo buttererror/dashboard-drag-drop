@@ -1,6 +1,6 @@
 <template>
      <aside class="l-sidebar grid-stack">
-          <div class="grid-stack-item" data-gs-x="0" data-gs-y="1" data-gs-width="12" data-gs-height="3">
+          <div class="grid-stack-item" data-gs-x="0" data-gs-y="1" data-gs-width="3" data-gs-height="3">
                <div class="grid-stack-item-content chart" ref="chartdiv">
                </div>
           </div>
@@ -17,14 +17,22 @@
    export default {
       name: "Sidebar",
       mounted() {
+
          let grids = window.GridStack.initAll({
             resizable: {
                handles: 'e, se, s, sw, w'
             },
             acceptWidgets: true
          });
+         grids[1].enableResize(false);
          grids.forEach((grid) => {
             grid.on('dropped', () => {
+               // if(grid.el.classList[0] === "l-sidebar") {
+               //    console.log("sidebar")
+               //    grid.column(12);
+               // }else {
+               //    grid.column(2);
+               // }
                this.createChart();
             })
          })
