@@ -1,0 +1,28 @@
+/* button module start */
+.btn {
+  float: right;
+  background: #2d353c;
+  border: none;
+  vertical-align: middle;
+  height: 40px;
+  margin: 7px 20px;
+  border-radius: 20px;
+  padding: 14px;
+  font-size: 14px;
+  line-height: 7px;
+  color: white;
+  cursor: pointer;
+  &__icon {
+    margin-right: 6px;
+  }
+}
+/* button module end */
+
+/* title module start */
+.title {
+  display: inline-block;
+  font-size: 20px;
+  color: #2d353c;
+  padding: 16px;
+  letter-spacing: 3px;}
+/* title module end */

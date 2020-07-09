@@ -24,16 +24,18 @@
             },
             acceptWidgets: true
          });
+         window.bus.$emit("send-grids", grids);
          grids[1].enableResize(false);
          grids.forEach((grid) => {
+            grid.disable()
             grid.on('dropped', () => {
-               if(grid.el.classList[0] === "l-sidebar") {
+               if (grid.el.classList[0] === "l-sidebar") {
                   grid.enableResize(false);
                   grid.minHeight(window.$('.grid-stack-item'), 2);
-                  window.$('.grid-stack-item').css({left: '5px', width: '286px', height: '220px'});
-               }else {
+                  window.$('.grid-stack-item').css({left: '0', width: '100%', height: '220px'});
+               } else {
                   grid.enableResize(true);
-                  grid.resize(window.$('.grid-stack-item'),3, 3);
+                  grid.resize(window.$('.grid-stack-item'), 3, 3);
                }
                this.createChart();
             })
