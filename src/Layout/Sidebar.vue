@@ -1,7 +1,7 @@
 <template>
      <aside class="l-sidebar grid-stack">
 <!--                    <div class="grid-stack-item" data-gs-x="0" data-gs-y="1" data-gs-width="12" data-gs-height="3">-->
-<!--                         <div class="grid-stack-item-content chart" ref="chartdiv">-->
+<!--                         <div class="grid-stack-item-content card" ref="chart">-->
 <!--                         </div>-->
 <!--                    </div>-->
 
@@ -58,7 +58,7 @@
          createGridItemInSidebar(grid) {
             if(grid.el.classList[0] === "l-sidebar") {
                let sidebarOptions = [{"x":0,"y":0,"width":12,"height":3}];
-               grid.addWidget('<div><div class="grid-stack-item-content chart" ref="chartdiv"></div></div>', sidebarOptions);
+               grid.addWidget('<div><div class="grid-stack-item-content card" ref="chart"></div></div>', sidebarOptions);
             }
          },
          loadGridItems(grid) {
@@ -73,7 +73,7 @@
             let items = this.loadGridItems(grid)
             grid.batchUpdate();
             items.forEach(function (node) {
-               grid.addWidget('<div><div class="grid-stack-item-content chart" ref="chartdiv"></div></div>', node);
+               grid.addWidget('<div><div class="grid-stack-item-content card" ref="chart"></div></div>', node);
             });
             grid.commit();
          },
@@ -96,7 +96,7 @@
             if (this.chart) {
                this.chart.dispose();
             }
-            let chart = am4core.create(document.querySelector(".chart"), am4charts.XYChart);
+            let chart = am4core.create(document.querySelector(".card"), am4charts.XYChart);
 
             chart.paddingRight = 20;
 
@@ -134,9 +134,5 @@
 </script>
 
 <style scoped>
-     .chart {
-          height: auto;
-          background: white;
-     }
 
 </style>
