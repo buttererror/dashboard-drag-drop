@@ -49,6 +49,9 @@
       methods: {
          initGrids() {
             return window.GridStack.initAll({
+               alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                  navigator.userAgent
+               ),
                resizable: {
                   handles: 'e, se, s, sw, w'
                },
